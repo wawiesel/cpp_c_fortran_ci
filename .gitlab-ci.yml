@@ -1,18 +1,48 @@
-build:
-  stage: build
+stages:
+  - configure
+  - build
+  - test
+
+configure:
+  stage: configure
   script:
     - mkdir build && cd build
-    - cmake ..
+    - mkdir debug && cd debug && cmake -DCMAKE_BUILD_TYPE=DEBUG -DCMAKE_INSTALL_PREFIX=$PWD/INSTALL ../.. && cd ..
+    - mkdir release && cd release && cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=$PWD/INSTALL ../.. && cd ..
+  artifacts:
+    paths:
+      - build/
+    expire_in: 1 day
+
+build_debug:
+  stage: build
+  script:
+    - cd build/debug
     - cmake --build .
   artifacts:
     paths:
-    - build/
+      - build/debug
+    expire_in: 1 day
 
-test:
+test_debug:
   stage: test
   script:
-    - cd build
-    - src/test_c
-    - src/test_cc
-    - src/test_f90
+    - cd build/debug
+    - ctest -j4
+
+build_release:
+  stage: build
+  script:
+    - cd build/release
+    - cmake --build .
+  artifacts:
+    paths:
+      - build/release
+    expire_in: 1 week
+
+test_release:
+  stage: test
+  script:
+    - cd build/release
+    - ctest -j4
 

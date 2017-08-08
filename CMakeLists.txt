@@ -9,4 +9,6 @@ project (RNSD_GITLAB_FAQ
 
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)
 
+enable_testing()
+
 add_subdirectory( src )
