@@ -2,7 +2,8 @@ stages:
   - configure
   - build
   - test
-
+  - deploy
+  
 configure:
   stage: configure
   script:
@@ -45,4 +46,14 @@ test_release:
   script:
     - cd build/release
     - ctest -j4
+
+deploy_staging:
+  stage: deploy
+  script:
+    - echo "Deploy to Will's dropbox!"
+  environment:
+    name: wills_dropbox
+    url: https://www.dropbox.com/sh/nihzwoz56gbq0dq/AABfbQgmtLgNhjX5sojWQZCqa?dl=0
+  only:
+  - master
 
