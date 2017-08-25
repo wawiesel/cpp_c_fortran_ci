@@ -1,59 +1,35 @@
-stages:
-  - configure
-  - build
-  - test
-  - deploy
-  
-configure:
-  stage: configure
-  script:
-    - mkdir build && cd build
-    - mkdir debug && cd debug && cmake -DCMAKE_BUILD_TYPE=DEBUG -DCMAKE_INSTALL_PREFIX=$PWD/INSTALL ../.. && cd ..
-    - mkdir release && cd release && cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=$PWD/INSTALL ../.. && cd ..
-  artifacts:
-    paths:
-      - build/
-    expire_in: 1 day
-
-build_debug:
-  stage: build
-  script:
-    - cd build/debug
-    - cmake --build .
-  artifacts:
-    paths:
-      - build/debug
-    expire_in: 1 day
-
-test_debug:
+test:cached_linux_release:
   stage: test
+  tags: 
+    - linux
   script:
-    - cd build/debug
-    - ctest -j4
-
-build_release:
-  stage: build
-  script:
-    - cd build/release
+    - ls .
+    - mkdir -p build/release && cd build/release
+    - cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=$PWD/INSTALL ../..
     - cmake --build .
+    - ctest -j4
   artifacts:
+    paths:
+      - build/release/CMakeCache.txt
+    expire_in: 1 week
+  cache:
+    key: "$CI_JOB_STAGE/$CI_COMMIT_REF_NAME"
     paths:
       - build/release
-    expire_in: 1 week
+  except:
+    - master
 
-test_release:
+test:linux_debug:
   stage: test
+  tags: 
+    - linux
   script:
-    - cd build/release
+    - ls .
+    - mkdir -p build/debug && cd build/debug
+    - cmake -DCMAKE_BUILD_TYPE=DEBUG -DCMAKE_INSTALL_PREFIX=$PWD/INSTALL ../..
+    - cmake --build .
     - ctest -j4
-
-deploy_staging:
-  stage: deploy
-  script:
-    - echo "Deploy to Will's dropbox!"
-  environment:
-    name: wills_dropbox
-    url: https://www.dropbox.com/sh/nihzwoz56gbq0dq/AABfbQgmtLgNhjX5sojWQZCqa?dl=0
-  only:
-  - master
-
+  artifacts:
+    paths:
+      - build/debug/CMakeCache.txt
+    expire_in: 1 week
