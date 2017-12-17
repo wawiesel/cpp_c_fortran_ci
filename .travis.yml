@@ -11,6 +11,11 @@ compiler:
 before_install:
     - sudo apt-get update -qq
     - sudo apt-get install gfortran
+    - sudo apt-get install cmake
+    - cmake --version
+    - gcc --version
+    - g++ --version
+    - gfortran --version
 
 script:
     - mkdir build && cd build
