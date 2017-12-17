@@ -1,0 +1,18 @@
+sudo: false
+
+dist: trusty
+
+language: cpp
+
+os:
+    - linux
+
+compiler:
+    - gcc
+
+script:
+    - mkdir build && cd build
+    - cmake ..
+    - ctest --build .
+    - ctest
+
