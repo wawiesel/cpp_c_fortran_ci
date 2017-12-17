@@ -10,6 +10,9 @@ os:
 compiler:
     - gcc
 
+before_install:
+    - apt-get install gfortran
+
 script:
     - mkdir build && cd build
     - cmake ..
