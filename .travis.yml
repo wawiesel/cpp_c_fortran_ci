@@ -21,8 +21,7 @@ before_install:
           sudo apt-get install cmake
       else
           brew update &>/dev/null
-          brew search gcc
-          brew install gcc
+          brew install gcc@4.8
           brew install cmake
       fi
     - cmake --version
