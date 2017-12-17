@@ -1,5 +1,7 @@
 sudo: required
 
+dist: trusty
+
 language: cpp
 
 os:
@@ -9,7 +11,6 @@ compiler:
     - gcc
 
 before_install:
-    - wget -q -O - https://www.mongodb.org/static/pgp/server-3.2.pub | sudo apt-key add -
     - sudo apt-get update -qq
     - sudo apt-get install gfortran
     - sudo apt-get install cmake
