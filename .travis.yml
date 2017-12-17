@@ -21,7 +21,9 @@ before_install:
           sudo apt-get install cmake
       else
           brew update &>/dev/null
-          brew install gcc && brew install libidn && export FC="gfortran"
+          brew install gcc
+          brew install libidn
+          brew install cmake
       fi
     - cmake --version
     - gcc --version
